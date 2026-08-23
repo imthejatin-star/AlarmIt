@@ -15,6 +15,8 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import java.util.Calendar;
+
 public class MainActivity extends Activity {
 
     private WebView webView;
@@ -25,7 +27,6 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
 
         setupWebView();
-
         handleAlarmIntent(getIntent());
     }
 
@@ -39,6 +40,7 @@ public class MainActivity extends Activity {
         settings.setDomStorageEnabled(true);
         settings.setAllowFileAccess(true);
         settings.setAllowContentAccess(true);
+        settings.setMediaPlaybackRequiresUserGesture(false);
 
         webView.setWebViewClient(new WebViewClient());
         webView.setWebChromeClient(new WebChromeClient());
@@ -50,53 +52,40 @@ public class MainActivity extends Activity {
 
         webView.setBackgroundColor(0xFF030711);
 
-        webView.loadUrl(
-                "file:///android_asset/index.html"
-        );
-
         setContentView(webView);
+
+        webView.loadUrl("file:///android_asset/index.html");
     }
 
     private void handleAlarmIntent(Intent intent) {
 
-        if (intent == null) {
-            return;
-        }
+        if (intent == null) return;
 
         if (AlarmReceiver.ACTION_ALARM.equals(intent.getAction())) {
 
-            pendingAlarmId =
-                    intent.getIntExtra(
-                            "alarmId",
-                            -1
-                    );
+            pendingAlarmId = intent.getIntExtra("alarmId", -1);
 
-            webView.postDelayed(
-                    new Runnable() {
-                        @Override
-                        public void run() {
-                            triggerPendingAlarm();
-                        }
-                    },
-                    1200
-            );
+            webView.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    triggerPendingAlarm();
+                }
+            }, 1000);
         }
     }
 
     private void triggerPendingAlarm() {
 
-        if (pendingAlarmId == -1) {
+        if (pendingAlarmId == -1 || webView == null) {
             return;
         }
 
         final int id = pendingAlarmId;
-
         pendingAlarmId = -1;
 
         webView.evaluateJavascript(
-                "window.nativeTriggerAlarm(" +
-                        id +
-                        ");",
+                "if(typeof window.nativeTriggerAlarm==='function')" +
+                        "{window.nativeTriggerAlarm(" + id + ");}",
                 null
         );
     }
@@ -107,7 +96,6 @@ public class MainActivity extends Activity {
         super.onNewIntent(intent);
 
         setIntent(intent);
-
         handleAlarmIntent(intent);
     }
 
@@ -128,14 +116,11 @@ public class MainActivity extends Activity {
         ) {
 
             AlarmManager alarmManager =
-                    (AlarmManager)
-                            context.getSystemService(
-                                    Context.ALARM_SERVICE
-                            );
+                    (AlarmManager) context.getSystemService(
+                            Context.ALARM_SERVICE
+                    );
 
-            if (alarmManager == null) {
-                return;
-            }
+            if (alarmManager == null) return;
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
 
@@ -156,9 +141,7 @@ public class MainActivity extends Activity {
                                 Intent.FLAG_ACTIVITY_NEW_TASK
                         );
 
-                        context.startActivity(
-                                settingsIntent
-                        );
+                        context.startActivity(settingsIntent);
 
                     } catch (Exception ignored) {
                     }
@@ -167,35 +150,19 @@ public class MainActivity extends Activity {
                 }
             }
 
-            Intent alarmIntent =
-                    new Intent(
-                            context,
-                            AlarmReceiver.class
-                    );
+            Intent alarmIntent = new Intent(
+                    context,
+                    AlarmReceiver.class
+            );
 
             alarmIntent.setAction(
                     AlarmReceiver.ACTION_ALARM
             );
 
-            alarmIntent.putExtra(
-                    "alarmId",
-                    id
-            );
-
-            alarmIntent.putExtra(
-                    "label",
-                    label
-            );
-
-            alarmIntent.putExtra(
-                    "hour",
-                    hour
-            );
-
-            alarmIntent.putExtra(
-                    "minute",
-                    minute
-            );
+            alarmIntent.putExtra("alarmId", id);
+            alarmIntent.putExtra("label", label);
+            alarmIntent.putExtra("hour", hour);
+            alarmIntent.putExtra("minute", minute);
 
             PendingIntent pendingIntent =
                     PendingIntent.getBroadcast(
@@ -206,59 +173,46 @@ public class MainActivity extends Activity {
                                     PendingIntent.FLAG_IMMUTABLE
                     );
 
-            java.util.Calendar calendar =
-                    java.util.Calendar.getInstance();
+            Calendar calendar = Calendar.getInstance();
 
-            calendar.set(
-                    java.util.Calendar.HOUR_OF_DAY,
-                    hour
-            );
+            calendar.set(Calendar.HOUR_OF_DAY, hour);
+            calendar.set(Calendar.MINUTE, minute);
+            calendar.set(Calendar.SECOND, 0);
+            calendar.set(Calendar.MILLISECOND, 0);
 
-            calendar.set(
-                    java.util.Calendar.MINUTE,
-                    minute
-            );
-
-            calendar.set(
-                    java.util.Calendar.SECOND,
-                    0
-            );
-
-            calendar.set(
-                    java.util.Calendar.MILLISECOND,
-                    0
-            );
-
-            /*
-             * The HTML alarm system already determines
-             * repeating days. The native layer schedules
-             * the next occurrence.
-             */
-            if (
-                    calendar.getTimeInMillis()
-                            <= System.currentTimeMillis()
-            ) {
+            if (calendar.getTimeInMillis() <=
+                    System.currentTimeMillis()) {
 
                 calendar.add(
-                        java.util.Calendar.DAY_OF_YEAR,
+                        Calendar.DAY_OF_YEAR,
                         1
                 );
             }
 
-            if (Build.VERSION.SDK_INT >=
-                    Build.VERSION_CODES.M) {
+            long triggerTime =
+                    calendar.getTimeInMillis();
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 
                 alarmManager.setExactAndAllowWhileIdle(
                         AlarmManager.RTC_WAKEUP,
-                        calendar.getTimeInMillis(),
+                        triggerTime,
+                        pendingIntent
+                );
+
+            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+
+                alarmManager.setExact(
+                        AlarmManager.RTC_WAKEUP,
+                        triggerTime,
                         pendingIntent
                 );
 
             } else {
 
-                alarmManager.setExact(
+                alarmManager.set(
                         AlarmManager.RTC_WAKEUP,
-                        calendar.getTimeInMillis(),
+                        triggerTime,
                         pendingIntent
                 );
             }
@@ -268,20 +222,16 @@ public class MainActivity extends Activity {
         public void cancelAlarm(int id) {
 
             AlarmManager alarmManager =
-                    (AlarmManager)
-                            context.getSystemService(
-                                    Context.ALARM_SERVICE
-                            );
-
-            if (alarmManager == null) {
-                return;
-            }
-
-            Intent alarmIntent =
-                    new Intent(
-                            context,
-                            AlarmReceiver.class
+                    (AlarmManager) context.getSystemService(
+                            Context.ALARM_SERVICE
                     );
+
+            if (alarmManager == null) return;
+
+            Intent alarmIntent = new Intent(
+                    context,
+                    AlarmReceiver.class
+            );
 
             alarmIntent.setAction(
                     AlarmReceiver.ACTION_ALARM
@@ -296,10 +246,7 @@ public class MainActivity extends Activity {
                                     PendingIntent.FLAG_IMMUTABLE
                     );
 
-            alarmManager.cancel(
-                    pendingIntent
-            );
-
+            alarmManager.cancel(pendingIntent);
             pendingIntent.cancel();
         }
     }
@@ -307,16 +254,22 @@ public class MainActivity extends Activity {
     @Override
     public void onBackPressed() {
 
-        if (
-                webView != null &&
-                webView.canGoBack()
-        ) {
-
+        if (webView != null && webView.canGoBack()) {
             webView.goBack();
-
         } else {
-
             super.onBackPressed();
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+
+        if (webView != null) {
+            webView.stopLoading();
+            webView.destroy();
+            webView = null;
+        }
+
+        super.onDestroy();
     }
 }
