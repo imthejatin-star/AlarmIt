@@ -30,11 +30,6 @@ button,input,select{font:inherit}
 button{cursor:pointer}
 button:active{transform:scale(.96)}
 
-/* =========================================================
-   CONTINUOUS AMBIENT BACKGROUND
-   Slow, seamless movement — colours remain constant
-========================================================= */
-
 body:before,
 body:after{
 content:"";
@@ -53,8 +48,7 @@ top:-8vh;
 background:#123d70;
 opacity:.28;
 filter:blur(110px);
-animation:
-mainOrbOne 48s ease-in-out infinite alternate;
+animation:mainOrbOne 48s ease-in-out infinite alternate;
 }
 
 body:after{
@@ -65,8 +59,7 @@ bottom:-18vh;
 background:#17285b;
 opacity:.27;
 filter:blur(115px);
-animation:
-mainOrbTwo 58s ease-in-out infinite alternate;
+animation:mainOrbTwo 58s ease-in-out infinite alternate;
 }
 
 .ambient{
@@ -86,39 +79,21 @@ will-change:transform;
 }
 
 .ambient i:nth-child(1){
-width:340px;
-height:340px;
-left:0;
-top:23%;
-background:#3974b4;
-opacity:.105;
-filter:blur(95px);
-animation:
-ambientOne 52s cubic-bezier(.45,.05,.55,.95) infinite alternate;
+width:340px;height:340px;left:0;top:23%;
+background:#3974b4;opacity:.105;filter:blur(95px);
+animation:ambientOne 52s cubic-bezier(.45,.05,.55,.95) infinite alternate;
 }
 
 .ambient i:nth-child(2){
-width:390px;
-height:390px;
-right:-5%;
-top:5%;
-background:#344994;
-opacity:.11;
-filter:blur(105px);
-animation:
-ambientTwo 64s cubic-bezier(.45,.05,.55,.95) infinite alternate;
+width:390px;height:390px;right:-5%;top:5%;
+background:#344994;opacity:.11;filter:blur(105px);
+animation:ambientTwo 64s cubic-bezier(.45,.05,.55,.95) infinite alternate;
 }
 
 .ambient i:nth-child(3){
-width:300px;
-height:300px;
-left:40%;
-bottom:-5%;
-background:#168096;
-opacity:.085;
-filter:blur(100px);
-animation:
-ambientThree 72s cubic-bezier(.45,.05,.55,.95) infinite alternate;
+width:300px;height:300px;left:40%;bottom:-5%;
+background:#168096;opacity:.085;filter:blur(100px);
+animation:ambientThree 72s cubic-bezier(.45,.05,.55,.95) infinite alternate;
 }
 
 @keyframes mainOrbOne{
@@ -164,8 +139,6 @@ ambientThree 72s cubic-bezier(.45,.05,.55,.95) infinite alternate;
 100%{transform:translate3d(-15vw,-15vh,0) scale(1.05)}
 }
 
-/* Very subtle atmospheric movement layer */
-
 .ambient:before,
 .ambient:after{
 content:"";
@@ -179,16 +152,12 @@ will-change:transform;
 }
 
 .ambient:before{
-left:18%;
-top:12%;
-background:#5285bb;
+left:18%;top:12%;background:#5285bb;
 animation:atmosphereOne 80s ease-in-out infinite alternate;
 }
 
 .ambient:after{
-right:15%;
-bottom:5%;
-background:#267e91;
+right:15%;bottom:5%;background:#267e91;
 animation:atmosphereTwo 90s ease-in-out infinite alternate;
 }
 
@@ -204,20 +173,11 @@ animation:atmosphereTwo 90s ease-in-out infinite alternate;
 100%{transform:translate3d(12vw,-32vh,0) scale(1.15)}
 }
 
-/* Keep background calm on low-power/reduced-motion devices */
-
 @media(prefers-reduced-motion:reduce){
-body:before,
-body:after,
-.ambient i,
-.ambient:before,
-.ambient:after{
-animation:none!important;
+body:before,body:after,.ambient i,.ambient:before,.ambient:after{
+animation:none!important
 }
 }
-
-
-/* APP */
 
 .app{
 max-width:570px;
@@ -429,17 +389,12 @@ background:#dbe4f1;
 transition:.28s cubic-bezier(.16,1,.3,1)
 }
 
-.switch.on{
-background:#dcecff
-}
+.switch.on{background:#dcecff}
 
 .switch.on:after{
 transform:translateX(23px);
 background:#07111d
 }
-
-
-/* MODAL */
 
 .modal{
 position:fixed;
@@ -476,9 +431,7 @@ font-size:23px;
 margin-bottom:22px
 }
 
-.field{
-margin-bottom:18px
-}
+.field{margin-bottom:18px}
 
 .field>label{
 display:block;
@@ -498,6 +451,11 @@ border-radius:14px;
 background:#142135;
 color:#fff;
 outline:none
+}
+
+input[type=time]::-webkit-calendar-picker-indicator{
+filter:invert(1);
+opacity:.7
 }
 
 .days{
@@ -554,9 +512,7 @@ background:#142135;
 color:#fff
 }
 
-.advanced-arrow{
-transition:.2s
-}
+.advanced-arrow{transition:.2s}
 
 .advanced-button.open .advanced-arrow{
 transform:rotate(180deg)
@@ -588,9 +544,7 @@ color:#8d9bb0;
 font-size:11px
 }
 
-input[type=range]{
-accent-color:#dcecff
-}
+input[type=range]{accent-color:#dcecff}
 
 .setting{
 display:flex;
@@ -628,9 +582,7 @@ background:#dbe4f1;
 transition:.25s
 }
 
-.mini.active{
-background:#dcecff
-}
+.mini.active{background:#dcecff}
 
 .mini.active span{
 transform:translateX(19px);
@@ -659,9 +611,6 @@ color:#fff
 background:#eaf3ff;
 color:#07111f
 }
-
-
-/* STATS */
 
 .stats-modal{
 position:fixed;
@@ -835,9 +784,6 @@ border-radius:10px;
 font-size:10px
 }
 
-
-/* RINGING */
-
 .ringing{
 position:fixed;
 inset:0;
@@ -846,13 +792,7 @@ display:none;
 align-items:center;
 justify-content:center;
 overflow:hidden;
-background:
-radial-gradient(
-ellipse at center,
-#193654 0,
-#0b1728 42%,
-#02060d 100%
-)
+background:radial-gradient(ellipse at center,#193654 0,#0b1728 42%,#02060d 100%)
 }
 
 .ringing.show{
@@ -861,16 +801,8 @@ animation:wake 1.8s ease
 }
 
 @keyframes wake{
-from{
-opacity:0;
-transform:scale(1.06);
-filter:blur(13px)
-}
-to{
-opacity:1;
-transform:scale(1);
-filter:blur(0)
-}
+from{opacity:0;transform:scale(1.06);filter:blur(13px)}
+to{opacity:1;transform:scale(1);filter:blur(0)}
 }
 
 .ring-bg{
@@ -944,9 +876,7 @@ animation:wave 35s ease-in-out infinite alternate-reverse
 }
 
 @keyframes wave{
-to{
-transform:translateX(8%) rotate(5deg) scale(1.08)
-}
+to{transform:translateX(8%) rotate(5deg) scale(1.08)}
 }
 
 .ring-content{
@@ -1023,7 +953,8 @@ height:66px;
 border-radius:50%;
 background:#eef5ff;
 box-shadow:0 8px 30px #79aef033;
-touch-action:none
+touch-action:none;
+will-change:transform
 }
 
 .slider:after{
@@ -1044,9 +975,6 @@ background:none;
 color:#8794a7;
 font-size:14px
 }
-
-
-/* EXIT */
 
 .exit-core,
 .exit-ring{
@@ -1086,18 +1014,12 @@ animation:er 1.2s .05s ease-out forwards
 
 @keyframes core{
 15%{opacity:.9}
-100%{
-opacity:0;
-transform:translate(-50%,-50%) scale(30)
-}
+100%{opacity:0;transform:translate(-50%,-50%) scale(30)}
 }
 
 @keyframes er{
 0%{opacity:.8}
-100%{
-opacity:0;
-transform:translate(-50%,-50%) scale(20)
-}
+100%{opacity:0;transform:translate(-50%,-50%) scale(20)}
 }
 
 .ringing.exiting .ring-content{
@@ -1110,23 +1032,12 @@ animation:re 1.3s ease forwards!important
 
 @keyframes ce{
 35%{transform:scale(1.04)}
-100%{
-opacity:0;
-transform:scale(.35) translateY(-50px);
-filter:blur(15px)
-}
+100%{opacity:0;transform:scale(.35) translateY(-50px);filter:blur(15px)}
 }
 
 @keyframes re{
-100%{
-opacity:0;
-transform:scale(1.12);
-filter:blur(15px)
+100%{opacity:0;transform:scale(1.12);filter:blur(15px)}
 }
-}
-
-
-/* TOAST */
 
 .toast{
 position:fixed;
@@ -1161,9 +1072,7 @@ transform:translate(-50%,0)
 <body>
 
 <div class="ambient">
-<i></i>
-<i></i>
-<i></i>
+<i></i><i></i><i></i>
 </div>
 
 <div class="app">
@@ -1173,7 +1082,6 @@ transform:translate(-50%,0)
 <button class="stats-button" id="statsButton" title="Sleep statistics">◔</button>
 <h1>Alarms</h1>
 </div>
-
 <button class="add" id="add">+</button>
 </header>
 
@@ -1184,16 +1092,11 @@ transform:translate(-50%,0)
 </div>
 
 <div class="section-title">Your alarms</div>
-
 <div class="alarms" id="alarms"></div>
 
 </div>
 
-
-<!-- ADD / EDIT ALARM -->
-
 <div class="modal" id="modal">
-
 <div class="panel">
 
 <h2 id="panelTitle">New Alarm</h2>
@@ -1205,15 +1108,12 @@ transform:translate(-50%,0)
 
 <div class="field">
 <label>LABEL</label>
-<input type="text" id="label" placeholder="Alarm">
+<input type="text" id="label" placeholder="Alarm" maxlength="60">
 </div>
 
 <div class="field">
-
 <label>REPEAT</label>
-
 <div class="days">
-
 <div class="day" data-day="0">S</div>
 <div class="day" data-day="1">M</div>
 <div class="day" data-day="2">T</div>
@@ -1221,43 +1121,26 @@ transform:translate(-50%,0)
 <div class="day" data-day="4">T</div>
 <div class="day" data-day="5">F</div>
 <div class="day" data-day="6">S</div>
-
 </div>
-
 </div>
 
 <div class="field">
-
 <label>CUSTOM SOUND</label>
-
-<label class="file-button" for="audio">
-♫ Choose audio file
-</label>
-
+<label class="file-button" for="audio">♫ Choose audio file</label>
 <input type="file" id="audio" accept="audio/*">
-
-<span class="audio-name" id="audioName">
-No custom sound selected
-</span>
-
+<span class="audio-name" id="audioName">No custom sound selected</span>
 </div>
 
-
 <div class="field">
-
 <button class="advanced-button" id="advancedButton">
-
 <span>Advanced settings</span>
 <span class="advanced-arrow">⌄</span>
-
 </button>
 
 <div class="advanced" id="advanced">
 
 <div class="field">
-
 <label>SNOOZE DURATION</label>
-
 <select id="snooze">
 <option value="5">5 minutes</option>
 <option value="10">10 minutes</option>
@@ -1265,41 +1148,26 @@ No custom sound selected
 <option value="20">20 minutes</option>
 <option value="30">30 minutes</option>
 </select>
-
 </div>
 
 <div class="field">
-
 <label>ALARM VOLUME</label>
-
 <div class="range">
-
 <input type="range" id="volume" min="10" max="100" value="75">
-
 <span id="volumeValue">75%</span>
-
 </div>
-
 </div>
 
 <div class="field">
-
 <label>GRADUAL VOLUME RAMP</label>
-
 <div class="range">
-
 <input type="range" id="fade" min="0" max="60" value="10">
-
 <span id="fadeValue">10s</span>
-
 </div>
-
 </div>
 
 <div class="field">
-
 <label>AUTO STOP</label>
-
 <select id="duration">
 <option value="0">Never</option>
 <option value="60">1 minute</option>
@@ -1307,144 +1175,75 @@ No custom sound selected
 <option value="300">5 minutes</option>
 <option value="600">10 minutes</option>
 </select>
-
 </div>
 
-
 <div class="setting">
-
 <div>
 <div class="setting-title">Vibration</div>
 <div class="setting-desc">Vibrate while ringing</div>
 </div>
-
-<button class="mini active" data-toggle="vibration">
-<span></span>
-</button>
-
+<button class="mini active" data-toggle="vibration"><span></span></button>
 </div>
 
-
 <div class="setting">
-
 <div>
 <div class="setting-title">Screen flash</div>
 <div class="setting-desc">Pulse the screen while ringing</div>
 </div>
-
-<button class="mini" data-toggle="flash">
-<span></span>
-</button>
-
+<button class="mini" data-toggle="flash"><span></span></button>
 </div>
 
-
 <div class="setting">
-
 <div>
 <div class="setting-title">Keep screen awake</div>
 <div class="setting-desc">Prevent sleep while alarm is active</div>
 </div>
-
-<button class="mini active" data-toggle="awake">
-<span></span>
-</button>
-
+<button class="mini active" data-toggle="awake"><span></span></button>
 </div>
 
-
 <div class="field" style="margin-top:18px">
-
 <label>DISMISS ANIMATION</label>
-
 <select id="dismissStyle">
 <option value="burst">Energy Burst</option>
 <option value="fade">Soft Fade</option>
 <option value="zoom">Deep Zoom</option>
 </select>
-
 </div>
 
 </div>
 </div>
-
 
 <div class="actions">
-
-<button class="cancel" id="cancel">
-Cancel
-</button>
-
-<button class="save" id="save">
-Save alarm
-</button>
-
+<button class="cancel" id="cancel">Cancel</button>
+<button class="save" id="save">Save alarm</button>
 </div>
 
 </div>
 </div>
-
-
-<!-- STATISTICS -->
 
 <div class="stats-modal" id="statsModal">
-
 <div class="stats-panel">
 
 <div class="stats-header">
-
 <h2>Sleep Statistics</h2>
-
-<button class="close-stats" id="closeStats">
-✕
-</button>
-
+<button class="close-stats" id="closeStats">✕</button>
 </div>
-
 
 <div class="big-stat">
-
-<div class="big-stat-number" id="bigDismissed">
-0
+<div class="big-stat-number" id="bigDismissed">0</div>
+<div class="big-stat-label">Alarms dismissed</div>
 </div>
-
-<div class="big-stat-label">
-Alarms dismissed
-</div>
-
-</div>
-
 
 <div class="stat-grid">
-
-<div class="stat">
-<b id="statSnoozed">0</b>
-<span>SNOOZES</span>
+<div class="stat"><b id="statSnoozed">0</b><span>SNOOZES</span></div>
+<div class="stat"><b id="statStreak">0</b><span>STREAK</span></div>
+<div class="stat"><b id="statTotal">0</b><span>HISTORY</span></div>
 </div>
 
-<div class="stat">
-<b id="statStreak">0</b>
-<span>STREAK</span>
-</div>
-
-<div class="stat">
-<b id="statTotal">0</b>
-<span>HISTORY</span>
-</div>
-
-</div>
-
-
-<div class="history-title">
-Recent wake-ups
-</div>
+<div class="history-title">Recent wake-ups</div>
 
 <div class="history-controls">
-
-<button class="clear-history" id="clearHistory">
-Clear all history
-</button>
-
+<button class="clear-history" id="clearHistory">Clear all history</button>
 </div>
 
 <div class="history" id="history"></div>
@@ -1452,79 +1251,74 @@ Clear all history
 </div>
 </div>
 
-
-<!-- RINGING SCREEN -->
-
 <div class="ringing" id="ringing">
 
 <div class="ring-bg">
-
 <div class="blob a"></div>
 <div class="blob b"></div>
 <div class="blob c"></div>
-
 <div class="wave one"></div>
 <div class="wave two"></div>
-
 </div>
-
 
 <div class="exit-core"></div>
 <div class="exit-ring"></div>
 <div class="exit-ring two"></div>
 
-
 <div class="ring-content">
 
-<div class="ring-icon">
-◔
-</div>
+<div class="ring-icon">◔</div>
 
-<div class="ring-time" id="ringTime">
-07:00
-</div>
+<div class="ring-time" id="ringTime">07:00</div>
 
-<div class="ring-label" id="ringLabel">
-Alarm
-</div>
+<div class="ring-label" id="ringLabel">Alarm</div>
 
 <div class="ring-info" id="ringInfo"></div>
 
-
 <div class="slide-area" id="slideArea">
-
-<div class="slide-text">
-Slide to dismiss
-</div>
-
+<div class="slide-text">Slide to dismiss</div>
 <div class="slider" id="slider"></div>
-
 </div>
 
-
-<button class="snooze" id="snoozeRing">
-Snooze
-</button>
+<button class="snooze" id="snoozeRing">Snooze</button>
 
 </div>
 </div>
-
 
 <div class="toast" id="toast"></div>
 
-
 <script>
-
 const $=id=>document.getElementById(id);
 
-let alarms=JSON.parse(
-localStorage.getItem("advancedAlarms")||"[]"
-);
+const STORAGE_KEY="advancedAlarms";
+const STATS_KEY="alarmStats";
 
-let stats=JSON.parse(
-localStorage.getItem("alarmStats")||
-'{"dismissed":0,"snoozed":0,"streak":0,"history":[]}'
-);
+function safeJSON(key,fallback){
+try{
+const raw=localStorage.getItem(key);
+return raw?JSON.parse(raw):fallback;
+}catch(e){
+return fallback;
+}
+}
+
+let alarms=safeJSON(STORAGE_KEY,[]);
+let stats=safeJSON(STATS_KEY,{
+dismissed:0,
+snoozed:0,
+streak:0,
+history:[]
+});
+
+if(!Array.isArray(alarms))alarms=[];
+if(!stats||typeof stats!=="object")stats={
+dismissed:0,snoozed:0,streak:0,history:[]
+};
+
+stats.dismissed=Number(stats.dismissed)||0;
+stats.snoozed=Number(stats.snoozed)||0;
+stats.streak=Number(stats.streak)||0;
+stats.history=Array.isArray(stats.history)?stats.history:[];
 
 let editingId=null;
 let selectedAudioData=null;
@@ -1538,40 +1332,31 @@ let lastTrigger="";
 let drag=false;
 let dragStart=0;
 let sliderStart=0;
-
-
-/* STORAGE */
+let flashTimer=null;
+let snoozeTimeout=null;
 
 function save(){
-localStorage.setItem(
-"advancedAlarms",
-JSON.stringify(alarms)
-);
+try{
+localStorage.setItem(STORAGE_KEY,JSON.stringify(alarms));
+}catch(e){
+showToast("Storage is full. Custom audio may be too large.");
+}
 }
 
 function saveStats(){
-localStorage.setItem(
-"alarmStats",
-JSON.stringify(stats)
-);
+localStorage.setItem(STATS_KEY,JSON.stringify(stats));
 }
-
-
-/* CLOCK */
 
 function pad(n){
 return String(n).padStart(2,"0");
 }
 
 function clock(){
+const n=new Date();
 
-let n=new Date();
+$("now").textContent=pad(n.getHours())+":"+pad(n.getMinutes());
 
-$("now").textContent=
-pad(n.getHours())+":"+pad(n.getMinutes());
-
-$("date").textContent=
-n.toLocaleDateString([],{
+$("date").textContent=n.toLocaleDateString([],{
 weekday:"long",
 day:"numeric",
 month:"long",
@@ -1580,565 +1365,374 @@ year:"numeric"
 
 updateCountdowns();
 checkAlarms();
-
 }
 
 setInterval(clock,1000);
 
-
-/* NEXT ALARM */
-
 function nextOccurrence(a){
-
 if(!a.enabled)return null;
 
-let now=new Date();
-
-let [h,m]=a.time.split(":").map(Number);
+const now=new Date();
+const [h,m]=String(a.time).split(":").map(Number);
 
 for(let i=0;i<8;i++){
-
-let d=new Date(now);
-
+const d=new Date(now);
 d.setHours(0,0,0,0);
-
 d.setDate(d.getDate()+i);
-
 d.setHours(h,m,0,0);
 
 if(d<=now)continue;
 
-if(a.days?.length){
-
-if(!a.days.includes(d.getDay()))
-continue;
-
+if(Array.isArray(a.days)&&a.days.length){
+if(!a.days.includes(d.getDay()))continue;
 }else{
-
-if(i!==0)
-continue;
-
+if(i!==0)continue;
 }
 
 return d;
-
 }
 
 return null;
 }
 
-
 function remaining(ms){
+let s=Math.max(0,Math.floor(ms/1000));
 
-let s=Math.max(
-0,
-Math.floor(ms/1000)
-);
-
-let d=Math.floor(s/86400);
-
+const d=Math.floor(s/86400);
 s%=86400;
 
-let h=Math.floor(s/3600);
-
+const h=Math.floor(s/3600);
 s%=3600;
 
-let m=Math.floor(s/60);
-
+const m=Math.floor(s/60);
 s%=60;
 
-if(d)
-return`in ${d}d ${h}h ${m}m`;
-
-if(h)
-return`in ${h}h ${m}m`;
-
-if(m)
-return`in ${m}m ${s}s`;
+if(d)return`in ${d}d ${h}h ${m}m`;
+if(h)return`in ${h}h ${m}m`;
+if(m)return`in ${m}m ${s}s`;
 
 return`in ${s}s`;
-
 }
 
-
-/* COUNTDOWNS */
-
 function updateCountdowns(){
-
-let soon=
-alarms
+const soon=alarms
 .filter(a=>a.enabled)
-.map(a=>({
-a,
-d:nextOccurrence(a)
-}))
+.map(a=>({a,d:nextOccurrence(a)}))
 .filter(x=>x.d)
 .sort((a,b)=>a.d-b.d)[0];
 
 $("next").innerHTML=soon
-?
-`Next alarm <strong>${soon.a.time}</strong> · ${remaining(soon.d-Date.now())}`
-:
-"No upcoming alarms";
-
+?`Next alarm <strong>${esc(soon.a.time)}</strong> · ${remaining(soon.d-Date.now())}`
+:"No upcoming alarms";
 
 document.querySelectorAll(".alarm").forEach(c=>{
-
-let a=alarms.find(
-x=>x.id==c.dataset.id
-);
-
-let e=c.querySelector(".countdown");
+const a=alarms.find(x=>String(x.id)===String(c.dataset.id));
+const e=c.querySelector(".countdown");
 
 if(!a||!e)return;
 
-let d=nextOccurrence(a);
+const d=nextOccurrence(a);
 
 e.textContent=!a.enabled
 ?"Alarm is off"
 :d
 ?remaining(d-Date.now())
 :"No upcoming occurrence";
-
 });
-
 }
 
-
-/* ESCAPE */
-
 function esc(x){
-
-return String(x||"")
+return String(x??"")
 .replaceAll("&","&amp;")
 .replaceAll("<","&lt;")
 .replaceAll(">","&gt;")
-.replaceAll('"',"&quot;");
-
+.replaceAll('"',"&quot;")
+.replaceAll("'","&#039;");
 }
 
-
-/* RENDER */
-
 function render(){
-
-let list=$("alarms");
+const list=$("alarms");
 
 if(!alarms.length){
-
-list.innerHTML=
-`<div class="empty">
+list.innerHTML=`
+<div class="empty">
 No alarms yet.<br>
 Tap + to create your first alarm.
 </div>`;
+return;
+}
 
-}else{
+list.innerHTML=alarms.map(a=>{
+const days=Array.isArray(a.days)?a.days:[];
 
-list.innerHTML=alarms.map(a=>`
-
-<div class="alarm ${a.enabled?"":"disabled"}"
-data-id="${a.id}">
+return`
+<div class="alarm ${a.enabled?"":"disabled"}" data-id="${esc(a.id)}">
 
 <div class="alarm-main">
 
-<div class="alarm-time">
-${esc(a.time)}
-</div>
+<div class="alarm-time">${esc(a.time)}</div>
 
-<div class="alarm-label">
-${esc(a.label||"Alarm")}
-</div>
+<div class="alarm-label">${esc(a.label||"Alarm")}</div>
 
 <div class="countdown"></div>
 
 <div class="meta">
 
 <span class="badge">
-${a.days?.length
-?a.days.map(d=>"SMTWTFS"[d]).join(" ")
+${days.length
+?days.map(d=>"SMTWTFS"[d]||"?").join(" ")
 :"Once"}
 </span>
 
-${a.audioData
-?'<span class="badge">♫ Custom</span>'
-:""}
+${a.audioData?'<span class="badge">♫ Custom</span>':""}
 
-${a.vibration
-?'<span class="badge">Vibration</span>'
-:""}
+${a.vibration?'<span class="badge">Vibration</span>':""}
+
+${a.flash?'<span class="badge">Flash</span>':""}
 
 </div>
 
 </div>
-
 
 <div class="alarm-actions">
 
-<button class="delete"
-data-delete="${a.id}">
-✕
-</button>
+<button class="delete" data-delete="${esc(a.id)}" aria-label="Delete alarm">✕</button>
 
 <button class="switch ${a.enabled?"on":""}"
-data-switch="${a.id}">
+data-switch="${esc(a.id)}"
+aria-label="${a.enabled?"Disable":"Enable"} alarm">
 </button>
 
 </div>
 
-</div>
+</div>`;
+}).join("");
 
-`).join("");
+document.querySelectorAll("[data-switch]").forEach(b=>{
+b.onclick=e=>{
+e.stopPropagation();
 
-}
-
-
-/* SWITCH */
-
-document.querySelectorAll("[data-switch]")
-.forEach(b=>{
-
-b.onclick=()=>{
-
-let a=alarms.find(
-x=>x.id==b.dataset.switch
-);
+const a=alarms.find(x=>String(x.id)===String(b.dataset.switch));
 
 if(a){
-
 a.enabled=!a.enabled;
-
 save();
 render();
-
 }
-
 };
-
 });
 
+document.querySelectorAll("[data-delete]").forEach(b=>{
+b.onclick=e=>{
+e.stopPropagation();
 
-/* DELETE */
+const a=alarms.find(x=>String(x.id)===String(b.dataset.delete));
 
-document.querySelectorAll("[data-delete]")
-.forEach(b=>{
+if(!a)return;
 
-b.onclick=()=>{
-
-if(confirm("Delete this alarm?")){
-
-alarms=alarms.filter(
-a=>a.id!=b.dataset.delete
-);
-
+if(confirm(`Delete "${a.label||"Alarm"}"?`)){
+alarms=alarms.filter(x=>String(x.id)!==String(b.dataset.delete));
 save();
 render();
-
+showToast("Alarm deleted");
 }
-
 };
-
 });
 
-
-/* DOUBLE CLICK EDIT */
-
-document.querySelectorAll(".alarm")
-.forEach(c=>{
-
-c.ondblclick=()=>{
-
-let a=alarms.find(
-x=>x.id==c.dataset.id
-);
-
-if(a)
-openEditor(a);
-
+document.querySelectorAll(".alarm").forEach(c=>{
+c.onclick=()=>{
+const a=alarms.find(x=>String(x.id)===String(c.dataset.id));
+if(a)openEditor(a);
 };
-
 });
 
 updateCountdowns();
-
 }
-
-
-/* EDITOR */
 
 $("add").onclick=()=>openEditor();
 
-$("cancel").onclick=()=>
+$("cancel").onclick=()=>{
 $("modal").classList.remove("show");
-
+};
 
 function setToggle(name,value){
-
 document
 .querySelector(`[data-toggle="${name}"]`)
-?.classList.toggle("active",value);
-
+?.classList.toggle("active",!!value);
 }
-
 
 function getToggle(name){
-
 return document
 .querySelector(`[data-toggle="${name}"]`)
-?.classList.contains("active");
-
+?.classList.contains("active")||false;
 }
 
+function resetAdvancedUI(){
+$("advancedButton").classList.remove("open");
+$("advanced").classList.remove("show");
+}
 
 function openEditor(a=null){
+editingId=a?.id??null;
 
-editingId=a?.id||null;
-
-$("panelTitle").textContent=
-a?"Edit Alarm":"New Alarm";
-
+$("panelTitle").textContent=a?"Edit Alarm":"New Alarm";
 
 if(a){
-
-$("alarmTime").value=a.time;
-
+$("alarmTime").value=a.time||"07:00";
 $("label").value=a.label||"";
 
 selectedAudioData=a.audioData||null;
 selectedAudioName=a.audioName||"";
 
 $("audioName").textContent=
-selectedAudioName||"Default sound";
+selectedAudioName||(
+selectedAudioData?"Custom sound":"No custom sound selected"
+);
 
-$("snooze").value=a.snooze||5;
+$("snooze").value=String(a.snooze??5);
+$("volume").value=String(a.volume??75);
+$("fade").value=String(a.fade??10);
+$("duration").value=String(a.duration??0);
+$("dismissStyle").value=a.dismissStyle||"burst";
 
-$("volume").value=a.volume||75;
-
-$("fade").value=a.fade??10;
-
-$("duration").value=a.duration||0;
-
-$("dismissStyle").value=
-a.dismissStyle||"burst";
-
-
-document.querySelectorAll(".day")
-.forEach(d=>
+document.querySelectorAll(".day").forEach(d=>{
 d.classList.toggle(
 "active",
-a.days?.includes(+d.dataset.day)
-)
+Array.isArray(a.days)&&a.days.includes(Number(d.dataset.day))
 );
+});
 
-
-["vibration","flash","awake"]
-.forEach(x=>
-setToggle(x,!!a[x])
-);
-
+setToggle("vibration",a.vibration!==false);
+setToggle("flash",!!a.flash);
+setToggle("awake",a.awake!==false);
 
 }else{
+const n=new Date(Date.now()+60000);
 
-let n=new Date(Date.now()+60000);
-
-$("alarmTime").value=
-pad(n.getHours())+
-":"+
-pad(n.getMinutes());
-
+$("alarmTime").value=pad(n.getHours())+":"+pad(n.getMinutes());
 $("label").value="";
 
 selectedAudioData=null;
 selectedAudioName="";
 
-$("audioName").textContent=
-"No custom sound selected";
+$("audioName").textContent="No custom sound selected";
 
+document.querySelectorAll(".day").forEach(d=>{
+d.classList.remove("active");
+});
 
-document.querySelectorAll(".day")
-.forEach(d=>
-d.classList.remove("active")
-);
-
-
-$("snooze").value=5;
-
-$("volume").value=75;
-
-$("fade").value=10;
-
-$("duration").value=0;
-
+$("snooze").value="5";
+$("volume").value="75";
+$("fade").value="10";
+$("duration").value="0";
 $("dismissStyle").value="burst";
 
 setToggle("vibration",true);
 setToggle("flash",false);
 setToggle("awake",true);
-
 }
 
+$("volumeValue").textContent=$("volume").value+"%";
+$("fadeValue").textContent=$("fade").value+"s";
 
-$("volumeValue").textContent=
-$("volume").value+"%";
-
-$("fadeValue").textContent=
-$("fade").value+"s";
+resetAdvancedUI();
 
 $("modal").classList.add("show");
-
 }
 
-
-/* DAYS */
-
-document.querySelectorAll(".day")
-.forEach(d=>
-d.onclick=()=>
-d.classList.toggle("active")
-);
-
-
-/* ADVANCED */
+document.querySelectorAll(".day").forEach(d=>{
+d.onclick=()=>d.classList.toggle("active");
+});
 
 $("advancedButton").onclick=()=>{
-
-$("advancedButton")
-.classList.toggle("open");
-
-$("advanced")
-.classList.toggle("show");
-
+$("advancedButton").classList.toggle("open");
+$("advanced").classList.toggle("show");
 };
 
+$("volume").oninput=()=>{
+$("volumeValue").textContent=$("volume").value+"%";
+};
 
-$("volume").oninput=()=>
-$("volumeValue").textContent=
-$("volume").value+"%";
+$("fade").oninput=()=>{
+$("fadeValue").textContent=$("fade").value+"s";
+};
 
-
-$("fade").oninput=()=>
-$("fadeValue").textContent=
-$("fade").value+"s";
-
-
-document.querySelectorAll(".mini")
-.forEach(b=>
-b.onclick=()=>
-b.classList.toggle("active")
-);
-
-
-/* AUDIO */
+document.querySelectorAll(".mini").forEach(b=>{
+b.onclick=()=>b.classList.toggle("active");
+});
 
 $("audio").onchange=async e=>{
-
-let f=e.target.files[0];
+const f=e.target.files?.[0];
 
 if(!f)return;
 
 if(!f.type.startsWith("audio/")){
-
 alert("Choose an audio file.");
-
+e.target.value="";
 return;
-
 }
 
-selectedAudioData=
-await new Promise((resolve,reject)=>{
+if(f.size>5*1024*1024){
+alert("For reliable local storage, choose an audio file under 5 MB.");
+e.target.value="";
+return;
+}
 
-let r=new FileReader();
-
+try{
+selectedAudioData=await new Promise((resolve,reject)=>{
+const r=new FileReader();
 r.onload=()=>resolve(r.result);
-
 r.onerror=reject;
-
 r.readAsDataURL(f);
-
 });
 
 selectedAudioName=f.name;
-
 $("audioName").textContent=f.name;
-
+}catch(e2){
+selectedAudioData=null;
+selectedAudioName="";
+$("audioName").textContent="Could not load audio";
+}
 };
-
-
-/* SAVE ALARM */
 
 $("save").onclick=()=>{
-
-let time=$("alarmTime").value;
+const time=$("alarmTime").value;
 
 if(!time){
-
 alert("Choose a time.");
-
 return;
-
 }
 
-let days=
-[...document.querySelectorAll(".day.active")]
-.map(d=>+d.dataset.day);
+const days=[...document.querySelectorAll(".day.active")]
+.map(d=>Number(d.dataset.day));
 
-let old=alarms.find(
-a=>a.id===editingId
-);
+const old=alarms.find(a=>a.id===editingId);
 
-let a={
-
+const a={
 id:editingId||Date.now(),
-
 time,
-
-label:
-$("label").value.trim()||"Alarm",
-
+label:$("label").value.trim()||"Alarm",
 days,
-
-enabled:
-old
-?old.enabled
-:true,
-
+enabled:old?old.enabled:true,
 audioData:selectedAudioData,
-
 audioName:selectedAudioName,
-
-snooze:+$("snooze").value,
-
-volume:+$("volume").value,
-
-fade:+$("fade").value,
-
-duration:+$("duration").value,
-
+snooze:Number($("snooze").value)||5,
+volume:Number($("volume").value)||75,
+fade:Number($("fade").value)||0,
+duration:Number($("duration").value)||0,
 vibration:getToggle("vibration"),
-
 flash:getToggle("flash"),
-
 awake:getToggle("awake"),
-
-dismissStyle:$("dismissStyle").value
-
+dismissStyle:$("dismissStyle").value||"burst"
 };
 
-
 if(editingId){
+const i=alarms.findIndex(x=>x.id===editingId);
 
-let i=alarms.findIndex(
-x=>x.id===editingId
-);
-
-if(i>=0)
-alarms[i]=a;
-else
-alarms.push(a);
-
+if(i>=0)alarms[i]=a;
+else alarms.push(a);
 }else{
-
 alarms.push(a);
-
 }
 
 save();
@@ -2146,830 +1740,529 @@ render();
 
 $("modal").classList.remove("show");
 
+showToast(editingId?"Alarm updated":"Alarm created");
+
+editingId=null;
 };
 
-
-/* ALARM CHECK */
-
 function checkAlarms(){
-
 if(activeAlarm)return;
 
-let n=new Date();
+const n=new Date();
 
-let hm=
-pad(n.getHours())+
-":"+
-pad(n.getMinutes());
+const hm=pad(n.getHours())+":"+pad(n.getMinutes());
+const day=n.getDay();
 
-let day=n.getDay();
+for(const a of alarms){
+if(!a.enabled||a.time!==hm)continue;
 
-for(let a of alarms){
-
-if(!a.enabled||a.time!==hm)
+if(Array.isArray(a.days)&&a.days.length&&!a.days.includes(day))
 continue;
 
-if(
-a.days?.length &&
-!a.days.includes(day)
-)
-continue;
+const key=a.id+"-"+n.toDateString()+"-"+hm;
 
-let key=
-a.id+
-"-"+
-n.toDateString()+
-"-"+
-hm;
-
-if(lastTrigger===key)
-continue;
+if(lastTrigger===key)continue;
 
 lastTrigger=key;
 
 trigger(a);
-
 break;
-
 }
-
 }
-
-
-/* AUDIO */
 
 function stopAudio(){
-
 try{
-
 if(alarmAudio instanceof HTMLAudioElement){
-
 alarmAudio.pause();
 alarmAudio.currentTime=0;
-
 }else if(alarmAudio){
-
-clearInterval(
-alarmAudio.interval
-);
-
-alarmAudio.oscillator.stop();
-
+if(alarmAudio.interval)clearInterval(alarmAudio.interval);
+if(alarmAudio.oscillator){
+try{alarmAudio.oscillator.stop()}catch(e){}
 }
-
+if(alarmAudio.context){
+try{alarmAudio.context.close()}catch(e){}
+}
+}
 }catch(e){}
 
 alarmAudio=null;
-
 }
 
-
 function startAudio(a){
-
 stopAudio();
 
 if(a.audioData){
-
-let x=new Audio(
-a.audioData
-);
+const x=new Audio(a.audioData);
 
 x.loop=true;
+x.volume=Math.max(0,Math.min(1,(a.volume??75)/100));
 
-x.volume=
-(a.volume||75)/100;
+const playPromise=x.play();
 
-x.play().catch(()=>{});
-
-alarmAudio=x;
-
-return;
-
+if(playPromise?.catch){
+playPromise.catch(()=>{
+showToast("Tap the screen if sound did not start");
+});
 }
 
+alarmAudio=x;
+return;
+}
 
 try{
-
-let AC=
-window.AudioContext||
-window.webkitAudioContext;
+const AC=window.AudioContext||window.webkitAudioContext;
 
 if(!AC)return;
 
 audioContext=new AC();
 
-let osc=
-audioContext.createOscillator();
-
-let gain=
-audioContext.createGain();
+const osc=audioContext.createOscillator();
+const gain=audioContext.createGain();
 
 osc.type="sine";
 
-osc.frequency.value=330;
+const maxGain=Math.max(.01,Math.min(1,(a.volume??75)/100))*.16;
 
 gain.gain.value=.001;
 
-gain.gain.linearRampToValueAtTime(
+const now=audioContext.currentTime;
+const fade=Number(a.fade)||0;
 
-(a.volume||75)/100*.12,
-
-a.fade
-?audioContext.currentTime+a.fade
-:audioContext.currentTime+.2
-
-);
+if(fade>0){
+gain.gain.linearRampToValueAtTime(maxGain,now+fade);
+}else{
+gain.gain.linearRampToValueAtTime(maxGain,now+.2);
+}
 
 osc.connect(gain);
-
-gain.connect(
-audioContext.destination
-);
-
+gain.connect(audioContext.destination);
 osc.start();
 
+const interval=setInterval(()=>{
+if(!audioContext)return;
+
+const t=audioContext.currentTime;
+
+try{
+osc.frequency.cancelScheduledValues(t);
+osc.frequency.setValueAtTime(330,t);
+osc.frequency.linearRampToValueAtTime(570,t+.7);
+osc.frequency.linearRampToValueAtTime(390,t+1.4);
+}catch(e){}
+},1800);
 
 alarmAudio={
-
 oscillator:osc,
-
 gain,
-
-interval:setInterval(()=>{
-
-let t=audioContext.currentTime;
-
-osc.frequency.setValueAtTime(
-330,t
-);
-
-osc.frequency.linearRampToValueAtTime(
-570,t+1.2
-);
-
-},2600)
-
+interval,
+context:audioContext
 };
 
-}catch(e){}
-
+}catch(e){
+console.error(e);
 }
-
-
-/* WAKE LOCK */
+}
 
 async function acquireWakeLock(){
-
 try{
-
 if("wakeLock"in navigator){
+wakeLock=await navigator.wakeLock.request("screen");
 
-wakeLock=
-await navigator.wakeLock.request(
-"screen"
-);
-
+wakeLock.addEventListener?.("release",()=>{
+wakeLock=null;
+});
 }
-
 }catch(e){}
-
 }
-
 
 async function releaseWakeLock(){
-
 try{
-
 if(wakeLock){
-
 await wakeLock.release();
-
 wakeLock=null;
-
 }
-
 }catch(e){}
-
 }
 
+function stopFlash(){
+if(flashTimer){
+clearInterval(flashTimer);
+flashTimer=null;
+}
 
-/* TRIGGER */
+document.body.style.background="";
+}
 
 function trigger(a){
+if(activeAlarm)return;
 
-activeAlarm=a;
+activeAlarm={
+...a,
+_triggeredAt:Date.now()
+};
 
 $("ringTime").textContent=a.time;
-
-$("ringLabel").textContent=
-a.label||"Alarm";
+$("ringLabel").textContent=a.label||"Alarm";
 
 $("ringInfo").textContent=
-(a.days?.length
+(Array.isArray(a.days)&&a.days.length
 ?"Repeating alarm"
 :"One-time alarm")+
 " · "+
 new Date().toLocaleDateString();
 
-
-$("ringing").classList.remove(
-"exiting"
-);
-
+$("ringing").classList.remove("exiting");
 void $("ringing").offsetWidth;
-
-$("ringing").classList.add(
-"show"
-);
-
+$("ringing").classList.add("show");
 
 startAudio(a);
 
-
 if(a.vibration&&navigator.vibrate){
-
-navigator.vibrate(
-[300,150,300,150,600]
-);
-
+navigator.vibrate([300,150,300,150,600]);
 }
 
-
-if(a.awake)
+if(a.awake){
 acquireWakeLock();
-
+}
 
 if(a.flash){
+stopFlash();
 
-document.body.style.transition=
-"background .5s";
+flashTimer=setInterval(()=>{
+document.body.style.background="#dcecff";
 
-let old=
-document.body.style.background;
-
-let flash=setInterval(()=>{
-
-document.body.style.background=
-"#dcecff";
-
-setTimeout(()=>
-document.body.style.background=old,
-250
-);
-
+setTimeout(()=>{
+if(activeAlarm)document.body.style.background="";
+},220);
 },1400);
 
-activeAlarm._flash=flash;
-
+activeAlarm._flash=true;
 }
-
 
 if(a.duration){
-
-alarmTimer=setTimeout(
-()=>dismissAlarm(),
-a.duration*1000
-);
-
+alarmTimer=setTimeout(()=>dismissAlarm(),a.duration*1000);
 }
 
-
-/* ONE-TIME ALARM AUTOMATICALLY OFF */
-
-if(!a.days?.length){
-
-let stored=alarms.find(
-x=>x.id===a.id
-);
+if(!Array.isArray(a.days)||!a.days.length){
+const stored=alarms.find(x=>x.id===a.id);
 
 if(stored){
-
 stored.enabled=false;
-
 save();
 render();
-
 }
-
 }
-
 }
-
-
-/* SLIDER */
 
 function sliderX(){
+const transform=getComputedStyle($("slider")).transform;
 
-let t=
-getComputedStyle($("slider"))
-.transform;
+if(transform==="none")return 0;
 
-return t==="none"
-?0
-:new DOMMatrix(t).m41;
-
+try{
+return new DOMMatrix(transform).m41;
+}catch(e){
+return 0;
 }
-
+}
 
 function maxSlider(){
-
-return $("slideArea").clientWidth-
+return Math.max(
+0,
+$("slideArea").clientWidth-
 $("slider").clientWidth-
-8;
-
+8
+);
 }
-
 
 function setSlider(x){
+x=Math.max(0,Math.min(maxSlider(),x));
 
-x=Math.max(
-0,
-Math.min(maxSlider(),x)
-);
-
-$("slider").style.transform=
-`translateX(${x}px)`;
+$("slider").style.transform=`translate3d(${x}px,0,0)`;
 
 return x;
-
 }
-
 
 function resetSlider(){
+$("slider").style.transition=".4s cubic-bezier(.16,1,.3,1)";
+$("slider").style.transform="translate3d(0,0,0)";
 
-$("slider").style.transition=
-".4s cubic-bezier(.16,1,.3,1)";
-
-$("slider").style.transform=
-"translateX(0)";
-
-setTimeout(()=>
-$("slider").style.transition=
-".08s linear",
-420
-);
-
+setTimeout(()=>{
+$("slider").style.transition=".08s linear";
+},420);
 }
 
-
 function beginDrag(x){
-
 if(!activeAlarm)return;
 
 drag=true;
-
 dragStart=x;
-
 sliderStart=sliderX();
-
+$("slider").style.transition=".08s linear";
 }
-
 
 function moveDrag(x){
-
 if(!drag)return;
 
-let p=setSlider(
-sliderStart+x-dragStart
-);
+const p=setSlider(sliderStart+x-dragStart);
 
 if(p>=maxSlider()*.92){
-
 drag=false;
-
 dismissAlarm();
-
 }
-
 }
-
 
 function endDrag(){
-
 if(drag){
-
 drag=false;
-
 resetSlider();
-
 }
-
 }
-
-
-/* MOUSE */
 
 $("slider").onmousedown=e=>{
-
 beginDrag(e.clientX);
-
 e.preventDefault();
-
 };
 
-window.onmousemove=e=>
-moveDrag(e.clientX);
-
+window.onmousemove=e=>moveDrag(e.clientX);
 window.onmouseup=endDrag;
 
-
-/* TOUCH */
-
 $("slider").ontouchstart=e=>{
-
-beginDrag(
-e.touches[0].clientX
-);
-
+beginDrag(e.touches[0].clientX);
 e.preventDefault();
-
 };
 
-
-window.addEventListener(
-"touchmove",
-e=>{
-
+window.addEventListener("touchmove",e=>{
 if(drag){
-
-moveDrag(
-e.touches[0].clientX
-);
-
+moveDrag(e.touches[0].clientX);
 e.preventDefault();
-
 }
+},{passive:false});
 
-},
-{passive:false}
-);
+window.addEventListener("touchend",endDrag);
 
+function finishRinging(){
+const screen=$("ringing");
 
-window.addEventListener(
-"touchend",
-endDrag
-);
+screen.classList.remove("exiting");
+void screen.offsetWidth;
+screen.classList.add("exiting");
 
-
-/* DISMISS */
+setTimeout(()=>{
+screen.classList.remove("show","exiting");
+activeAlarm=null;
+resetSlider();
+render();
+},1300);
+}
 
 function dismissAlarm(){
-
 if(!activeAlarm)return;
 
 clearTimeout(alarmTimer);
+alarmTimer=null;
 
-stopAudio();
-
-releaseWakeLock();
-
-
-if(activeAlarm._flash){
-
-clearInterval(
-activeAlarm._flash
-);
-
-document.body.style.background="";
-
+if(snoozeTimeout){
+clearTimeout(snoozeTimeout);
+snoozeTimeout=null;
 }
 
+stopAudio();
+releaseWakeLock();
+stopFlash();
 
-if(navigator.vibrate)
-navigator.vibrate(0);
-
+if(navigator.vibrate){
+try{navigator.vibrate(0)}catch(e){}
+}
 
 stats.dismissed++;
-
 stats.streak++;
 
-
 stats.history.unshift({
-
 id:Date.now(),
-
 alarmId:activeAlarm.id,
-
-label:
-activeAlarm.label||"Alarm",
-
-time:
-new Date().toLocaleString()
-
+label:activeAlarm.label||"Alarm",
+time:new Date().toLocaleString()
 });
 
-
-stats.history=
-stats.history.slice(0,30);
+stats.history=stats.history.slice(0,30);
 
 saveStats();
 
-
-let screen=$("ringing");
-
-screen.classList.remove(
-"exiting"
-);
-
-void screen.offsetWidth;
-
-screen.classList.add(
-"exiting"
-);
-
-
-setTimeout(()=>{
-
-screen.classList.remove(
-"show",
-"exiting"
-);
-
-activeAlarm=null;
-
-resetSlider();
-
-render();
-
-},1300);
-
+finishRinging();
 }
 
-
-/* SNOOZE */
-
-$("snoozeRing").onclick=
-snoozeAlarm;
-
+$("snoozeRing").onclick=snoozeAlarm;
 
 function snoozeAlarm(){
-
 if(!activeAlarm)return;
 
-let a={...activeAlarm};
-
-let mins=a.snooze||5;
+const a={...activeAlarm};
+const mins=Number(a.snooze)||5;
 
 clearTimeout(alarmTimer);
+alarmTimer=null;
 
 stopAudio();
-
 releaseWakeLock();
+stopFlash();
 
-
-if(a._flash)
-clearInterval(a._flash);
-
-document.body.style.background="";
-
-
-if(navigator.vibrate)
-navigator.vibrate(0);
-
+if(navigator.vibrate){
+try{navigator.vibrate(0)}catch(e){}
+}
 
 stats.snoozed++;
-
 saveStats();
 
-
-$("ringing")
-.classList.add("exiting");
-
+$("ringing").classList.add("exiting");
 
 setTimeout(()=>{
-
-$("ringing")
-.classList.remove(
-"show",
-"exiting"
-);
+$("ringing").classList.remove("show","exiting");
 
 activeAlarm=null;
 
 resetSlider();
 
-showToast(
-`Snoozed for ${mins} minutes`
-);
+showToast(`Snoozed for ${mins} minutes`);
 
-
-setTimeout(()=>{
+snoozeTimeout=setTimeout(()=>{
+snoozeTimeout=null;
 
 if(!activeAlarm){
-
 trigger({
-
 ...a,
-
 id:Date.now(),
-
 enabled:true,
-
 days:[new Date().getDay()]
-
 });
-
 }
-
 },mins*60000);
 
 },1000);
-
 }
-
-
-/* STATISTICS */
 
 function updateStatsUI(){
-
-$("bigDismissed").textContent=
-stats.dismissed;
-
-$("statSnoozed").textContent=
-stats.snoozed;
-
-$("statStreak").textContent=
-stats.streak;
-
-$("statTotal").textContent=
-stats.history.length;
-
+$("bigDismissed").textContent=stats.dismissed;
+$("statSnoozed").textContent=stats.snoozed;
+$("statStreak").textContent=stats.streak;
+$("statTotal").textContent=stats.history.length;
 
 if(!stats.history.length){
-
-$("history").innerHTML=
-`<div class="no-history">
+$("history").innerHTML=`
+<div class="no-history">
 No wake-up history yet.
 </div>`;
-
 return;
-
 }
 
-
-$("history").innerHTML=
-stats.history.map((h,i)=>`
-
+$("history").innerHTML=stats.history.map((h,i)=>`
 <div class="history-row">
-
 <div class="history-info">
-
 <b>${esc(h.label)}</b>
-
 <span>${esc(h.time)}</span>
-
 </div>
-
-<button
-class="history-delete"
+<button class="history-delete"
 data-history="${i}"
-title="Delete this history entry">
-
-✕
-
-</button>
-
+title="Delete this history entry">✕</button>
 </div>
-
 `).join("");
 
-
-document.querySelectorAll(
-"[data-history]"
-).forEach(button=>{
-
+document.querySelectorAll("[data-history]").forEach(button=>{
 button.onclick=()=>{
+const index=Number(button.dataset.history);
 
-let index=
-Number(button.dataset.history);
+if(!Number.isInteger(index)||!stats.history[index])return;
 
-if(
-!Number.isInteger(index)||
-!stats.history[index]
-)
-return;
+const item=stats.history[index];
 
-let item=
-stats.history[index];
-
-if(confirm(
-`Delete the history log for "${item.label}"?`
-)){
-
-stats.history.splice(
-index,
-1
-);
-
+if(confirm(`Delete the history log for "${item.label}"?`)){
+stats.history.splice(index,1);
 saveStats();
-
 updateStatsUI();
-
-showToast(
-"History log deleted"
-);
-
+showToast("History log deleted");
 }
-
 };
-
 });
-
 }
-
-
-/* OPEN STATS */
 
 $("statsButton").onclick=()=>{
-
 updateStatsUI();
-
-$("statsModal")
-.classList.add("show");
-
+$("statsModal").classList.add("show");
 };
 
-
-$("closeStats").onclick=()=>
-$("statsModal")
-.classList.remove("show");
-
+$("closeStats").onclick=()=>{
+$("statsModal").classList.remove("show");
+};
 
 $("statsModal").onclick=e=>{
-
-if(e.target===$("statsModal"))
-$("statsModal")
-.classList.remove("show");
-
+if(e.target===$("statsModal")){
+$("statsModal").classList.remove("show");
+}
 };
 
-
-/* CLEAR HISTORY */
-
 $("clearHistory").onclick=()=>{
-
 if(!stats.history.length){
-
-showToast(
-"History is already empty"
-);
-
+showToast("History is already empty");
 return;
-
 }
 
-
-if(confirm(
-"Delete all alarm history logs?"
-)){
-
+if(confirm("Delete all alarm history logs?")){
 stats.history=[];
-
 stats.dismissed=0;
-
 stats.snoozed=0;
-
 stats.streak=0;
 
 saveStats();
-
 updateStatsUI();
 
-showToast(
-"All history deleted"
-);
-
+showToast("All history deleted");
 }
-
 };
-
-
-/* TOAST */
 
 let toastTimer;
 
 function showToast(text){
-
 clearTimeout(toastTimer);
 
 $("toast").textContent=text;
+$("toast").classList.add("show");
 
-$("toast")
-.classList.add("show");
-
-toastTimer=setTimeout(()=>
-$("toast").classList.remove("show"),
-2200
-);
-
+toastTimer=setTimeout(()=>{
+$("toast").classList.remove("show");
+},2200);
 }
 
+$("modal").addEventListener("click",e=>{
+if(e.target===$("modal")){
+$("modal").classList.remove("show");
+}
+});
 
-/* START */
+document.addEventListener("keydown",e=>{
+if(e.key==="Escape"){
+$("modal").classList.remove("show");
+$("statsModal").classList.remove("show");
+}
+});
+
+document.addEventListener("visibilitychange",()=>{
+if(document.visibilityState==="visible"){
+clock();
+
+if(activeAlarm?.awake&&!wakeLock){
+acquireWakeLock();
+}
+}
+});
+
+window.addEventListener("resize",()=>{
+if(activeAlarm)setSlider(sliderX());
+});
 
 render();
 clock();
-
 </script>
+
 </body>
 </html>
