@@ -2971,6 +2971,103 @@ render();
 clock();
 
 </script>
+<script>
+(function () {
 
+    function getAlarmData() {
+        try {
+            const raw = localStorage.getItem("alarms");
+            if (!raw) return [];
+
+            const data = JSON.parse(raw);
+            return Array.isArray(data) ? data : [];
+        } catch (e) {
+            return [];
+        }
+    }
+
+    function syncAlarmWithAndroid(alarm) {
+
+        if (!window.AndroidAlarm || !alarm) return;
+
+        const id = Number(
+            alarm.id ||
+            alarm.alarmId ||
+            alarm._id ||
+            0
+        );
+
+        if (!id) return;
+
+        if (
+            alarm.enabled === false ||
+            alarm.active === false ||
+            alarm.on === false
+        ) {
+            AndroidAlarm.cancelAlarm(id);
+            return;
+        }
+
+        const time =
+            alarm.time ||
+            alarm.alarmTime ||
+            alarm.hourMinute;
+
+        if (!time) return;
+
+        const match =
+            String(time).match(
+                /^(\d{1,2}):(\d{2})/
+            );
+
+        if (!match) return;
+
+        const hour = Number(match[1]);
+        const minute = Number(match[2]);
+
+        if (
+            hour < 0 ||
+            hour > 23 ||
+            minute < 0 ||
+            minute > 59
+        ) {
+            return;
+        }
+
+        AndroidAlarm.scheduleAlarm(
+            id,
+            hour,
+            minute,
+            String(
+                alarm.label ||
+                alarm.name ||
+                "Alarm"
+            )
+        );
+    }
+
+    window.syncAlarmItNative = function () {
+
+        const alarms = getAlarmData();
+
+        alarms.forEach(function (alarm) {
+            syncAlarmWithAndroid(alarm);
+        });
+    };
+
+    window.addEventListener(
+        "load",
+        function () {
+
+            setTimeout(
+                window.syncAlarmItNative,
+                1000
+            );
+
+        }
+    );
+
+})();
+</script>
 </body>
 </html>
