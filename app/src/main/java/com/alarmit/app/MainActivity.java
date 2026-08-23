@@ -1,19 +1,14 @@
 package com.alarmit.app;
 
 import android.app.Activity;
-import android.os.Bundle;
-import android.webkit.WebChromeClient;
-import android.webkit.WebSettings;
-import android.webkit.WebView;package com.alarmit.app;
-
-import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.net.Uri;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
@@ -46,7 +41,9 @@ public class MainActivity extends Activity {
                 "AndroidAlarm"
         );
 
-        webView.loadUrl("file:///android_asset/index.html");
+        webView.loadUrl(
+                "file:///android_asset/index.html"
+        );
 
         setContentView(webView);
     }
@@ -72,79 +69,94 @@ public class MainActivity extends Activity {
                             Context.ALARM_SERVICE
                     );
 
-            if (alarmManager == null) return;
-
-            if (android.os.Build.VERSION.SDK_INT >= 31 &&
-                    !alarmManager.canScheduleExactAlarms()) {
-
-                try {
-                    Intent intent = new Intent(
-                            Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM,
-                            Uri.parse(
-                                    "package:" +
-                                    context.getPackageName()
-                            )
-                    );
-
-                    intent.addFlags(
-                            Intent.FLAG_ACTIVITY_NEW_TASK
-                    );
-
-                    context.startActivity(intent);
-
-                } catch (Exception ignored) {
-                }
-
+            if (alarmManager == null) {
                 return;
             }
 
-            Calendar calendar = Calendar.getInstance();
+            /*
+             * Android 12+ requires the user to allow
+             * exact alarms.
+             */
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
 
-            calendar.set(
+                if (!alarmManager.canScheduleExactAlarms()) {
+
+                    try {
+
+                        Intent settingsIntent =
+                                new Intent(
+                                        Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM,
+                                        Uri.parse(
+                                                "package:" +
+                                                context.getPackageName()
+                                        )
+                                );
+
+                        settingsIntent.addFlags(
+                                Intent.FLAG_ACTIVITY_NEW_TASK
+                        );
+
+                        context.startActivity(settingsIntent);
+
+                    } catch (Exception ignored) {
+                    }
+
+                    return;
+                }
+            }
+
+            Calendar alarmTime =
+                    Calendar.getInstance();
+
+            alarmTime.set(
                     Calendar.HOUR_OF_DAY,
                     hour
             );
 
-            calendar.set(
+            alarmTime.set(
                     Calendar.MINUTE,
                     minute
             );
 
-            calendar.set(
+            alarmTime.set(
                     Calendar.SECOND,
                     0
             );
 
-            calendar.set(
+            alarmTime.set(
                     Calendar.MILLISECOND,
                     0
             );
 
-            if (calendar.getTimeInMillis()
+            /*
+             * If today's time has already passed,
+             * schedule it for tomorrow.
+             */
+            if (alarmTime.getTimeInMillis()
                     <= System.currentTimeMillis()) {
 
-                calendar.add(
+                alarmTime.add(
                         Calendar.DAY_OF_YEAR,
                         1
                 );
             }
 
-            Intent intent =
+            Intent alarmIntent =
                     new Intent(
                             context,
                             AlarmReceiver.class
                     );
 
-            intent.setAction(
+            alarmIntent.setAction(
                     AlarmReceiver.ACTION_ALARM
             );
 
-            intent.putExtra(
+            alarmIntent.putExtra(
                     "label",
                     label
             );
 
-            intent.putExtra(
+            alarmIntent.putExtra(
                     "time",
                     String.format(
                             "%02d:%02d",
@@ -157,16 +169,27 @@ public class MainActivity extends Activity {
                     PendingIntent.getBroadcast(
                             context,
                             id,
-                            intent,
+                            alarmIntent,
                             PendingIntent.FLAG_UPDATE_CURRENT |
                             PendingIntent.FLAG_IMMUTABLE
                     );
 
-            alarmManager.setExactAndAllowWhileIdle(
-                    AlarmManager.RTC_WAKEUP,
-                    calendar.getTimeInMillis(),
-                    pendingIntent
-            );
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+
+                alarmManager.setExactAndAllowWhileIdle(
+                        AlarmManager.RTC_WAKEUP,
+                        alarmTime.getTimeInMillis(),
+                        pendingIntent
+                );
+
+            } else {
+
+                alarmManager.setExact(
+                        AlarmManager.RTC_WAKEUP,
+                        alarmTime.getTimeInMillis(),
+                        pendingIntent
+                );
+            }
         }
 
         @JavascriptInterface
@@ -177,15 +200,17 @@ public class MainActivity extends Activity {
                             Context.ALARM_SERVICE
                     );
 
-            if (alarmManager == null) return;
+            if (alarmManager == null) {
+                return;
+            }
 
-            Intent intent =
+            Intent alarmIntent =
                     new Intent(
                             context,
                             AlarmReceiver.class
                     );
 
-            intent.setAction(
+            alarmIntent.setAction(
                     AlarmReceiver.ACTION_ALARM
             );
 
@@ -193,7 +218,7 @@ public class MainActivity extends Activity {
                     PendingIntent.getBroadcast(
                             context,
                             id,
-                            intent,
+                            alarmIntent,
                             PendingIntent.FLAG_UPDATE_CURRENT |
                             PendingIntent.FLAG_IMMUTABLE
                     );
@@ -206,44 +231,13 @@ public class MainActivity extends Activity {
     @Override
     public void onBackPressed() {
 
-        if (webView.canGoBack()) {
+        if (webView != null &&
+                webView.canGoBack()) {
+
             webView.goBack();
+
         } else {
-            super.onBackPressed();
-        }
-    }
-}
-import android.webkit.WebViewClient;
 
-public class MainActivity extends Activity {
-
-    private WebView webView;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        webView = new WebView(this);
-
-        WebSettings settings = webView.getSettings();
-        settings.setJavaScriptEnabled(true);
-        settings.setDomStorageEnabled(true);
-        settings.setAllowFileAccess(true);
-        settings.setAllowContentAccess(true);
-
-        webView.setWebViewClient(new WebViewClient());
-        webView.setWebChromeClient(new WebChromeClient());
-
-        webView.loadUrl("file:///android_asset/index.html");
-
-        setContentView(webView);
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (webView.canGoBack()) {
-            webView.goBack();
-        } else {
             super.onBackPressed();
         }
     }
