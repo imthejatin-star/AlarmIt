@@ -2974,98 +2974,202 @@ clock();
 <script>
 (function () {
 
-    function getAlarmData() {
-        try {
-            const raw = localStorage.getItem("alarms");
-            if (!raw) return [];
+    let lastAlarmState = "";
 
-            const data = JSON.parse(raw);
-            return Array.isArray(data) ? data : [];
-        } catch (e) {
-            return [];
+    function readAlarms() {
+        const possibleKeys = [
+            "alarms",
+            "AlarmIt_alarms",
+            "alarmData",
+            "alarmDataList"
+        ];
+
+        for (const key of possibleKeys) {
+            try {
+                const value = localStorage.getItem(key);
+
+                if (!value) continue;
+
+                const parsed = JSON.parse(value);
+
+                if (Array.isArray(parsed)) {
+                    return parsed;
+                }
+            } catch (e) {}
         }
+
+        return [];
     }
 
-    function syncAlarmWithAndroid(alarm) {
+    function parseTime(value) {
 
-        if (!window.AndroidAlarm || !alarm) return;
+        if (!value) return null;
 
-        const id = Number(
-            alarm.id ||
-            alarm.alarmId ||
-            alarm._id ||
-            0
+        let text = String(value)
+            .trim()
+            .toUpperCase();
+
+        /*
+         * Supports:
+         * 07:30
+         * 7:30
+         * 07:30 AM
+         * 7:30 PM
+         */
+
+        const match = text.match(
+            /^(\d{1,2}):(\d{2})\s*(AM|PM)?$/
         );
 
-        if (!id) return;
+        if (!match) return null;
 
-        if (
-            alarm.enabled === false ||
-            alarm.active === false ||
-            alarm.on === false
-        ) {
-            AndroidAlarm.cancelAlarm(id);
+        let hour = Number(match[1]);
+        const minute = Number(match[2]);
+        const period = match[3];
+
+        if (minute < 0 || minute > 59) {
+            return null;
+        }
+
+        if (period === "AM") {
+
+            if (hour === 12) {
+                hour = 0;
+            }
+
+        } else if (period === "PM") {
+
+            if (hour !== 12) {
+                hour += 12;
+            }
+        }
+
+        if (hour < 0 || hour > 23) {
+            return null;
+        }
+
+        return {
+            hour: hour,
+            minute: minute
+        };
+    }
+
+    function getAlarmId(alarm, index) {
+
+        return Number(
+            alarm.id ??
+            alarm.alarmId ??
+            alarm._id ??
+            index + 1
+        );
+    }
+
+    function isEnabled(alarm) {
+
+        if (alarm.enabled !== undefined) {
+            return alarm.enabled === true;
+        }
+
+        if (alarm.active !== undefined) {
+            return alarm.active === true;
+        }
+
+        if (alarm.on !== undefined) {
+            return alarm.on === true;
+        }
+
+        return true;
+    }
+
+    function getAlarmTime(alarm) {
+
+        return (
+            alarm.time ??
+            alarm.alarmTime ??
+            alarm.hourMinute ??
+            alarm.displayTime ??
+            null
+        );
+    }
+
+    function syncWithAndroid() {
+
+        if (!window.AndroidAlarm) {
             return;
         }
 
-        const time =
-            alarm.time ||
-            alarm.alarmTime ||
-            alarm.hourMinute;
+        const alarms = readAlarms();
 
-        if (!time) return;
+        const state = JSON.stringify(alarms);
 
-        const match =
-            String(time).match(
-                /^(\d{1,2}):(\d{2})/
+        if (state === lastAlarmState) {
+            return;
+        }
+
+        lastAlarmState = state;
+
+        alarms.forEach(function (alarm, index) {
+
+            const id = getAlarmId(
+                alarm,
+                index
             );
 
-        if (!match) return;
+            if (!id) return;
 
-        const hour = Number(match[1]);
-        const minute = Number(match[2]);
+            if (!isEnabled(alarm)) {
 
-        if (
-            hour < 0 ||
-            hour > 23 ||
-            minute < 0 ||
-            minute > 59
-        ) {
-            return;
-        }
+                AndroidAlarm.cancelAlarm(id);
 
-        AndroidAlarm.scheduleAlarm(
-            id,
-            hour,
-            minute,
-            String(
-                alarm.label ||
-                alarm.name ||
-                "Alarm"
-            )
-        );
+                return;
+            }
+
+            const parsed = parseTime(
+                getAlarmTime(alarm)
+            );
+
+            if (!parsed) return;
+
+            AndroidAlarm.scheduleAlarm(
+                id,
+                parsed.hour,
+                parsed.minute,
+                String(
+                    alarm.label ??
+                    alarm.name ??
+                    "Alarm"
+                )
+            );
+
+        });
     }
 
-    window.syncAlarmItNative = function () {
+    /*
+     * Check frequently while AlarmIt is open.
+     * This catches newly-created and newly-enabled alarms
+     * without depending on the names of your existing
+     * JavaScript functions.
+     */
 
-        const alarms = getAlarmData();
-
-        alarms.forEach(function (alarm) {
-            syncAlarmWithAndroid(alarm);
-        });
-    };
+    setInterval(
+        syncWithAndroid,
+        1000
+    );
 
     window.addEventListener(
         "load",
         function () {
 
             setTimeout(
-                window.syncAlarmItNative,
-                1000
+                syncWithAndroid,
+                500
             );
 
         }
     );
+
+    window.syncAlarmItNative =
+        syncWithAndroid;
 
 })();
 </script>
