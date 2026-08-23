@@ -2969,7 +2969,62 @@ $("toast").classList.remove("show"),
 
 render();
 clock();
+/* =========================================================
+   ANDROID NATIVE ALARM BRIDGE
+========================================================= */
 
+function syncNativeAlarms(){
+
+    if(!window.AndroidAlarm) return;
+
+    alarms.forEach(a => {
+
+        if(!a.enabled) {
+
+            AndroidAlarm.cancelAlarm(a.id);
+
+            return;
+        }
+
+        const next = nextOccurrence(a);
+
+        if(!next) return;
+
+        AndroidAlarm.scheduleAlarm(
+            a.id,
+            next.getHours(),
+            next.getMinutes(),
+            a.label || "Alarm"
+        );
+
+    });
+
+}
+
+
+/* Replace the normal save function with one that also
+   synchronizes alarms with Android */
+
+const originalAlarmSave = save;
+
+save = function(){
+
+    originalAlarmSave();
+
+    setTimeout(
+        syncNativeAlarms,
+        100
+    );
+
+};
+
+
+/* Synchronize existing alarms when the app opens */
+
+setTimeout(
+    syncNativeAlarms,
+    500
+);
 </script>
 
 </body>
