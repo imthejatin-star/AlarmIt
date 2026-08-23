@@ -2,24 +2,41 @@ package com.alarmit.app;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.graphics.Color;
-import android.view.Gravity;
-import android.widget.TextView;
+import android.webkit.WebChromeClient;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 
 public class MainActivity extends Activity {
+
+    private WebView webView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        TextView screen = new TextView(this);
+        webView = new WebView(this);
 
-        screen.setText("AlarmIt\n\nYour alarm app is starting...");
-        screen.setTextColor(Color.WHITE);
-        screen.setTextSize(22);
-        screen.setGravity(Gravity.CENTER);
-        screen.setBackgroundColor(Color.rgb(3, 7, 17));
+        WebSettings settings = webView.getSettings();
+        settings.setJavaScriptEnabled(true);
+        settings.setDomStorageEnabled(true);
+        settings.setAllowFileAccess(true);
+        settings.setAllowContentAccess(true);
 
-        setContentView(screen);
+        webView.setWebViewClient(new WebViewClient());
+        webView.setWebChromeClient(new WebChromeClient());
+
+        webView.loadUrl("file:///android_asset/index.html");
+
+        setContentView(webView);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (webView.canGoBack()) {
+            webView.goBack();
+        } else {
+            super.onBackPressed();
+        }
     }
 }
