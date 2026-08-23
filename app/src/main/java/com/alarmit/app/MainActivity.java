@@ -15,19 +15,26 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-import java.util.Calendar;
-
 public class MainActivity extends Activity {
 
     private WebView webView;
+    private int pendingAlarmId = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        setupWebView();
+
+        handleAlarmIntent(getIntent());
+    }
+
+    private void setupWebView() {
+
         webView = new WebView(this);
 
         WebSettings settings = webView.getSettings();
+
         settings.setJavaScriptEnabled(true);
         settings.setDomStorageEnabled(true);
         settings.setAllowFileAccess(true);
@@ -41,6 +48,8 @@ public class MainActivity extends Activity {
                 "AndroidAlarm"
         );
 
+        webView.setBackgroundColor(0xFF030711);
+
         webView.loadUrl(
                 "file:///android_asset/index.html"
         );
@@ -48,7 +57,61 @@ public class MainActivity extends Activity {
         setContentView(webView);
     }
 
-    public static class AlarmBridge {
+    private void handleAlarmIntent(Intent intent) {
+
+        if (intent == null) {
+            return;
+        }
+
+        if (AlarmReceiver.ACTION_ALARM.equals(intent.getAction())) {
+
+            pendingAlarmId =
+                    intent.getIntExtra(
+                            "alarmId",
+                            -1
+                    );
+
+            webView.postDelayed(
+                    new Runnable() {
+                        @Override
+                        public void run() {
+                            triggerPendingAlarm();
+                        }
+                    },
+                    1200
+            );
+        }
+    }
+
+    private void triggerPendingAlarm() {
+
+        if (pendingAlarmId == -1) {
+            return;
+        }
+
+        final int id = pendingAlarmId;
+
+        pendingAlarmId = -1;
+
+        webView.evaluateJavascript(
+                "window.nativeTriggerAlarm(" +
+                        id +
+                        ");",
+                null
+        );
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+
+        super.onNewIntent(intent);
+
+        setIntent(intent);
+
+        handleAlarmIntent(intent);
+    }
+
+    public class AlarmBridge {
 
         private final Context context;
 
@@ -65,18 +128,15 @@ public class MainActivity extends Activity {
         ) {
 
             AlarmManager alarmManager =
-                    (AlarmManager) context.getSystemService(
-                            Context.ALARM_SERVICE
-                    );
+                    (AlarmManager)
+                            context.getSystemService(
+                                    Context.ALARM_SERVICE
+                            );
 
             if (alarmManager == null) {
                 return;
             }
 
-            /*
-             * Android 12+ requires the user to allow
-             * exact alarms.
-             */
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
 
                 if (!alarmManager.canScheduleExactAlarms()) {
@@ -88,7 +148,7 @@ public class MainActivity extends Activity {
                                         Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM,
                                         Uri.parse(
                                                 "package:" +
-                                                context.getPackageName()
+                                                        context.getPackageName()
                                         )
                                 );
 
@@ -96,49 +156,15 @@ public class MainActivity extends Activity {
                                 Intent.FLAG_ACTIVITY_NEW_TASK
                         );
 
-                        context.startActivity(settingsIntent);
+                        context.startActivity(
+                                settingsIntent
+                        );
 
                     } catch (Exception ignored) {
                     }
 
                     return;
                 }
-            }
-
-            Calendar alarmTime =
-                    Calendar.getInstance();
-
-            alarmTime.set(
-                    Calendar.HOUR_OF_DAY,
-                    hour
-            );
-
-            alarmTime.set(
-                    Calendar.MINUTE,
-                    minute
-            );
-
-            alarmTime.set(
-                    Calendar.SECOND,
-                    0
-            );
-
-            alarmTime.set(
-                    Calendar.MILLISECOND,
-                    0
-            );
-
-            /*
-             * If today's time has already passed,
-             * schedule it for tomorrow.
-             */
-            if (alarmTime.getTimeInMillis()
-                    <= System.currentTimeMillis()) {
-
-                alarmTime.add(
-                        Calendar.DAY_OF_YEAR,
-                        1
-                );
             }
 
             Intent alarmIntent =
@@ -152,17 +178,23 @@ public class MainActivity extends Activity {
             );
 
             alarmIntent.putExtra(
+                    "alarmId",
+                    id
+            );
+
+            alarmIntent.putExtra(
                     "label",
                     label
             );
 
             alarmIntent.putExtra(
-                    "time",
-                    String.format(
-                            "%02d:%02d",
-                            hour,
-                            minute
-                    )
+                    "hour",
+                    hour
+            );
+
+            alarmIntent.putExtra(
+                    "minute",
+                    minute
             );
 
             PendingIntent pendingIntent =
@@ -171,14 +203,54 @@ public class MainActivity extends Activity {
                             id,
                             alarmIntent,
                             PendingIntent.FLAG_UPDATE_CURRENT |
-                            PendingIntent.FLAG_IMMUTABLE
+                                    PendingIntent.FLAG_IMMUTABLE
                     );
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            java.util.Calendar calendar =
+                    java.util.Calendar.getInstance();
+
+            calendar.set(
+                    java.util.Calendar.HOUR_OF_DAY,
+                    hour
+            );
+
+            calendar.set(
+                    java.util.Calendar.MINUTE,
+                    minute
+            );
+
+            calendar.set(
+                    java.util.Calendar.SECOND,
+                    0
+            );
+
+            calendar.set(
+                    java.util.Calendar.MILLISECOND,
+                    0
+            );
+
+            /*
+             * The HTML alarm system already determines
+             * repeating days. The native layer schedules
+             * the next occurrence.
+             */
+            if (
+                    calendar.getTimeInMillis()
+                            <= System.currentTimeMillis()
+            ) {
+
+                calendar.add(
+                        java.util.Calendar.DAY_OF_YEAR,
+                        1
+                );
+            }
+
+            if (Build.VERSION.SDK_INT >=
+                    Build.VERSION_CODES.M) {
 
                 alarmManager.setExactAndAllowWhileIdle(
                         AlarmManager.RTC_WAKEUP,
-                        alarmTime.getTimeInMillis(),
+                        calendar.getTimeInMillis(),
                         pendingIntent
                 );
 
@@ -186,7 +258,7 @@ public class MainActivity extends Activity {
 
                 alarmManager.setExact(
                         AlarmManager.RTC_WAKEUP,
-                        alarmTime.getTimeInMillis(),
+                        calendar.getTimeInMillis(),
                         pendingIntent
                 );
             }
@@ -196,9 +268,10 @@ public class MainActivity extends Activity {
         public void cancelAlarm(int id) {
 
             AlarmManager alarmManager =
-                    (AlarmManager) context.getSystemService(
-                            Context.ALARM_SERVICE
-                    );
+                    (AlarmManager)
+                            context.getSystemService(
+                                    Context.ALARM_SERVICE
+                            );
 
             if (alarmManager == null) {
                 return;
@@ -220,10 +293,13 @@ public class MainActivity extends Activity {
                             id,
                             alarmIntent,
                             PendingIntent.FLAG_UPDATE_CURRENT |
-                            PendingIntent.FLAG_IMMUTABLE
+                                    PendingIntent.FLAG_IMMUTABLE
                     );
 
-            alarmManager.cancel(pendingIntent);
+            alarmManager.cancel(
+                    pendingIntent
+            );
+
             pendingIntent.cancel();
         }
     }
@@ -231,8 +307,10 @@ public class MainActivity extends Activity {
     @Override
     public void onBackPressed() {
 
-        if (webView != null &&
-                webView.canGoBack()) {
+        if (
+                webView != null &&
+                webView.canGoBack()
+        ) {
 
             webView.goBack();
 
